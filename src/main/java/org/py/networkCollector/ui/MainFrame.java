@@ -94,8 +94,4 @@ public class MainFrame {
             frame.setVisible(true);
         });
     }
-
-    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        new MainFrame().show();
-    }
 }
