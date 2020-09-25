@@ -14,9 +14,9 @@ public class MainService extends Service {
         return fileChooser.getSelectedFile();
     }
 
-    public boolean valid(String url, String query, String attr, String saveDir) {
+    public boolean valid(String url, String query, String attr) {
         boolean result = true;
-        if (url.isEmpty() || query.isEmpty() || attr.isEmpty() || saveDir.isEmpty())
+        if (url.isEmpty() || query.isEmpty() || attr.isEmpty())
             result = false;
         return result;
     }

@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public final class UrlTakeService extends Service {
         this.entity = entity;
     }
 
-    public List<String> tack() throws IOException {
+    public List<String> tack(JTextArea textArea, JTextField textInfo) throws IOException {
         final Document doc = Jsoup.connect(entity.getUrl()).get();
         final Elements elements = doc.select(entity.getQuery());
         final List<String> msgList = new ArrayList<>();
@@ -52,11 +53,16 @@ public final class UrlTakeService extends Service {
             JOptionPane.showMessageDialog(null, "未查找到任何资源！");
             return msgList;
         }
-        Path savePath = entity.getSavePath() != null ? entity.getSavePath().resolve(defaultSaveDir) : Paths.get(defaultSaveDir);
+        textInfo.setText(String.valueOf(elements.size()));
+        String currDate = LocalDate.now().toString();
+        Path savePath = entity.getSavePath() != null ? entity.getSavePath().resolve(defaultSaveDir).resolve(currDate) : Paths.get(defaultSaveDir).resolve(currDate);
         if (!Files.exists(savePath))
             Files.createDirectories(savePath);
+        textArea.append("保存路径：" + savePath.toAbsolutePath() + newLine);
+        textArea.append("解析资源：" + newLine);
         elements.forEach(el -> {
             String attr = el.attr(entity.getAttr());
+            textArea.append(el.text() + newLine);
             if (!attr.startsWith(Protocol.http.get()) || !attr.startsWith(Protocol.https.get())) {
                 String host;
                 try {
@@ -66,21 +72,25 @@ public final class UrlTakeService extends Service {
                 }
                 attr = attr.startsWith(separator) ? host + attr : host + separator + attr;
             }
-            String fn = attr.substring(attr.lastIndexOf(separator));
-            String extFn = fn.substring(fn.lastIndexOf(dot));
+            textArea.append("属性：" + attr + newLine);
+            String fn = attr.lastIndexOf(separator) > 0 ? attr.substring(attr.lastIndexOf(separator)) : "";
+            String extFn = fn.lastIndexOf(dot) > 0 ? fn.substring(fn.lastIndexOf(dot)) : "";
             String realFn = generateName();
             if (!extFn.isEmpty()) {
                 try {
                     final byte[] data = Request.Get(attr).execute().returnContent().asBytes();
                     final Path writePath = save(savePath.resolve(realFn + extFn), data);
-                    String msg = attr;
-                    msgList.add(msg + "\n");
-                    log.info(msg);
+                    msgList.add(attr + newLine);
+                    textArea.append(attr + newLine);
+                    log.info(attr);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    textArea.setText("");
+                    textArea.append(e.toString());
                 }
             } else {
-                log.info("未知的文件类型！" + attr);
+                String msg = "未知的类型！" + attr;
+                log.info(msg);
+                textArea.append(msg);
             }
         });
         return msgList;

@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
 
 @Log
 public class MainFrame {
@@ -24,10 +22,11 @@ public class MainFrame {
     private JTextField textField_attr;
     private JTextField textField_savePath;
     private JButton JButton_reset;
+    private JTextField textField_findInfo;
 
     private MainService mainService;
 
-    protected void init() {
+    private void init() {
         mainService = new MainService();
         /**
          * 抓取网页按钮事件
@@ -37,14 +36,11 @@ public class MainFrame {
             String query = textField_query.getText();
             String attr = textField_attr.getText();
             String saveDir = textField_savePath.getText();
-            if (mainService.valid(url, query, attr, saveDir)) {
+            textArea_Info.setText("");
+            if (mainService.valid(url, query, attr)) {
                 final UrlTakeService urlTakeService = new UrlTakeService(url, query, attr, Paths.get(saveDir));
                 try {
-                    final List<String> msgList = urlTakeService.tack();
-                    final Optional<String> reduce = msgList.stream().reduce(String::concat);
-                    if (reduce.isPresent()) {
-                        textArea_Info.setText(reduce.get());
-                    }
+                    urlTakeService.tack(textArea_Info, textField_findInfo);
                 } catch (IOException ioException) {
                     mainService.printErrors(ioException);
                 }
@@ -52,13 +48,6 @@ public class MainFrame {
                 JOptionPane.showMessageDialog(null, "必要信息未填写完整！请填写完整后重试。");
                 textField_URL.grabFocus();
             }
-        });
-        /**
-         * 退出按钮事件
-         * */
-        JButton_Exit.addActionListener(e -> {
-            final MainWin rootFrame = (MainWin) ((JButton) e.getSource()).getRootPane().getParent();
-            rootFrame.exit();
         });
 
         /**
@@ -78,6 +67,8 @@ public class MainFrame {
             textField_savePath.setText("");
             textField_attr.setText("");
             textField_query.setText("");
+            textArea_Info.setText("");
+            textField_findInfo.setText("");
             textField_URL.grabFocus();
         });
     }

@@ -15,11 +15,13 @@ public abstract class Service {
     protected String separator;
     protected String dot;
     protected String urlDot;
+    protected String newLine;
 
     public Service() {
         separator = "/";
         dot = ".";
         urlDot = "://";
+        newLine = "\r";
     }
 
     protected String generateName() {
