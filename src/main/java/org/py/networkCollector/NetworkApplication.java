@@ -6,7 +6,7 @@ import org.py.networkCollector.ui.MainFrame;
 import javax.swing.*;
 
 @Log
-public class networkApplication {
+public class NetworkApplication {
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         new MainFrame().show();
     }
