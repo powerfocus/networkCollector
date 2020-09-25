@@ -21,7 +21,7 @@ public abstract class Service {
         separator = "/";
         dot = ".";
         urlDot = "://";
-        newLine = "\r";
+        newLine = "\n";
     }
 
     protected String generateName() {

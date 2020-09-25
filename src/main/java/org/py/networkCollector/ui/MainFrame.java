@@ -54,7 +54,7 @@ public class MainFrame {
          * 选择保存位置按钮事件
          * */
         JButton_BowerSavePath.addActionListener(e -> {
-            final File file = mainService.chooserDir((JFrame)((JButton)e.getSource()).getRootPane().getParent());
+            final File file = mainService.chooserDir((JFrame) ((JButton) e.getSource()).getRootPane().getParent());
             textField_savePath.setText(file.getAbsolutePath());
         });
 
@@ -64,7 +64,6 @@ public class MainFrame {
         JButton_reset.addActionListener(e -> {
             textArea_Info.setText("");
             textField_URL.setText("");
-            textField_savePath.setText("");
             textField_attr.setText("");
             textField_query.setText("");
             textArea_Info.setText("");

@@ -29,6 +29,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <font/>
                   <text value="URL："/>
                 </properties>
               </component>
@@ -39,7 +40,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <font name="DialogInput" size="18"/>
+                  <font name="DialogInput" size="18" style="1"/>
                 </properties>
               </component>
             </children>
@@ -59,6 +60,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <font/>
               <text value="抓取"/>
             </properties>
           </component>
@@ -85,6 +87,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <font/>
               <text value="查询："/>
             </properties>
           </component>
@@ -95,7 +98,7 @@
               </grid>
             </constraints>
             <properties>
-              <font name="DialogInput" size="18"/>
+              <font name="DialogInput" size="18" style="1"/>
             </properties>
           </component>
         </children>
@@ -120,9 +123,9 @@
               <component id="86948" class="javax.swing.JTextArea" binding="textArea_Info">
                 <constraints/>
                 <properties>
-                  <font name="DialogInput" size="15"/>
-                  <lineWrap value="true"/>
-                  <wrapStyleWord value="true"/>
+                  <font name="DialogInput" size="10" style="1"/>
+                  <lineWrap value="false"/>
+                  <wrapStyleWord value="false"/>
                 </properties>
               </component>
             </children>
@@ -142,6 +145,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <font/>
               <text value="保存位置："/>
             </properties>
           </component>
@@ -160,7 +164,7 @@
               </grid>
             </constraints>
             <properties>
-              <font name="DialogInput" size="18"/>
+              <font name="DialogInput" size="18" style="1"/>
             </properties>
           </component>
         </children>
@@ -213,6 +217,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <font/>
               <text value="属性："/>
             </properties>
           </component>
@@ -223,7 +228,7 @@
               </grid>
             </constraints>
             <properties>
-              <font name="DialogInput" size="18"/>
+              <font name="DialogInput" size="18" style="1"/>
             </properties>
           </component>
         </children>
@@ -246,6 +251,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <font/>
               <text value="检索结果："/>
             </properties>
           </component>
@@ -256,7 +262,8 @@
               </grid>
             </constraints>
             <properties>
-              <font name="DialogInput" size="18"/>
+              <enabled value="false"/>
+              <font name="DialogInput" size="18" style="1"/>
             </properties>
           </component>
         </children>

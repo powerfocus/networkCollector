@@ -17,6 +17,8 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Log
 public final class UrlTakeService extends Service {
@@ -58,12 +60,12 @@ public final class UrlTakeService extends Service {
         Path savePath = entity.getSavePath() != null ? entity.getSavePath().resolve(defaultSaveDir).resolve(currDate) : Paths.get(defaultSaveDir).resolve(currDate);
         if (!Files.exists(savePath))
             Files.createDirectories(savePath);
-        textArea.append("保存路径：" + savePath.toAbsolutePath() + newLine);
-        textArea.append("解析资源：" + newLine);
+        textArea.append("to path: " + savePath.toAbsolutePath() + newLine);
+        final ExecutorService pool = Executors.newFixedThreadPool(50);
         elements.forEach(el -> {
             String attr = el.attr(entity.getAttr());
-            textArea.append(el.text() + newLine);
-            if (!attr.startsWith(Protocol.http.get()) || !attr.startsWith(Protocol.https.get())) {
+            textArea.append(el.toString() + newLine);
+            if (!attr.startsWith(Protocol.http.get()) && !attr.startsWith(Protocol.https.get())) {
                 String host;
                 try {
                     host = getHost(entity.getUrl());
@@ -72,27 +74,38 @@ public final class UrlTakeService extends Service {
                 }
                 attr = attr.startsWith(separator) ? host + attr : host + separator + attr;
             }
-            textArea.append("属性：" + attr + newLine);
+            textArea.append(attr + newLine);
             String fn = attr.lastIndexOf(separator) > 0 ? attr.substring(attr.lastIndexOf(separator)) : "";
             String extFn = fn.lastIndexOf(dot) > 0 ? fn.substring(fn.lastIndexOf(dot)) : "";
             String realFn = generateName();
             if (!extFn.isEmpty()) {
-                try {
-                    final byte[] data = Request.Get(attr).execute().returnContent().asBytes();
-                    final Path writePath = save(savePath.resolve(realFn + extFn), data);
-                    msgList.add(attr + newLine);
-                    textArea.append(attr + newLine);
-                    log.info(attr);
-                } catch (IOException e) {
-                    textArea.setText("");
-                    textArea.append(e.toString());
-                }
+                AtomicReference<String> atomicAttr = new AtomicReference<>(attr);
+                Future<?> future = pool.submit(() -> {
+                    try {
+                        final byte[] data = Request.Get(atomicAttr.get()).execute().returnContent().asBytes();
+                        final Path writePath = save(savePath.resolve(realFn + extFn), data);
+                        msgList.add(atomicAttr.get() + newLine);
+                        textArea.append(atomicAttr + newLine);
+                        log.info(atomicAttr.get());
+                    } catch (IOException e) {
+                        textArea.append(e.toString());
+                    } catch (Exception e) {
+                        textArea.append(e.toString());
+                    }
+                });
             } else {
                 String msg = "未知的类型！" + attr;
                 log.info(msg);
                 textArea.append(msg);
             }
         });
+        pool.shutdown();
+        try {
+            pool.awaitTermination(-1, TimeUnit.HOURS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        JOptionPane.showMessageDialog(null, "资源抓取完成！");
         return msgList;
     }
 }
