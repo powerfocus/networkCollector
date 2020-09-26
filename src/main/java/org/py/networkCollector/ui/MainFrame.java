@@ -79,7 +79,7 @@ public class MainFrame {
     public void show() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         SwingUtilities.invokeLater(() -> {
-            MainWin frame = new MainWin("网络收集器", 300, 700);
+            MainWin frame = new MainWin("网络收集器", 350, 700);
             frame.setContentPane(new MainFrame().JPanel_root);
             frame.setVisible(true);
         });
